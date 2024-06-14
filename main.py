@@ -51,72 +51,88 @@ if __name__ == "__main__":
     gelu_net = NN(activation="GeLU")
     relu_net = NN(activation="ReLU")
 
-    train_data = torch.Tensor(
-        [
-            [1.70, 70, 1],
-            [1.60, 50, 0],
-            [1.80, 80, 1],
-            [1.85, 90, 1],
-            [1.75, 75, 0],
-            [1.65, 55, 0],
-        ]
-    )
-    train_labels = torch.Tensor([[25], [20], [30], [35], [27], [22]])
+    train_data = [
+        torch.Tensor([1.70, 70, 1]),
+        torch.Tensor([1.60, 50, 0]),
+        torch.Tensor([1.80, 80, 1]),
+        torch.Tensor([1.85, 90, 1]),
+        torch.Tensor([1.75, 75, 0]),
+        torch.Tensor([1.65, 55, 0]),
+    ]
+    train_labels = [
+        torch.Tensor([25]),
+        torch.Tensor([20]),
+        torch.Tensor([30]),
+        torch.Tensor([35]),
+        torch.Tensor([27]),
+        torch.Tensor([22]),
+    ]
 
-    test_data = torch.Tensor(
-        [
-            [1.75, 80, 1],
-            [1.65, 55, 0],
-        ]
-    )
-    test_labels = torch.Tensor([[30], [22]])
+    test_data = [
+        torch.Tensor([1.75, 80, 1]),
+        torch.Tensor([1.65, 55, 0]),
+    ]
+
+    test_labels = [torch.Tensor([30]), torch.Tensor([22])]
 
     epochs = 1000
+    lr = 0.001
 
     ##
     ## Let's test the GeLU network
     ##
     criterion = nn.MSELoss()
-    optimizer = torch.optim.Adam(gelu_net.parameters(), lr=0.001)
+    optimizer = torch.optim.Adam(gelu_net.parameters(), lr=lr)
 
     for epoch in range(epochs):
-        optimizer.zero_grad()
-        output = gelu_net(train_data)
-        loss = criterion(output, train_labels)
-        loss.backward()
-        optimizer.step()
-
-        if epoch % 100 == 0:
-            print(f"Epoch {epoch} - Loss: {loss.item()}")
-
-    with torch.no_grad():
-        output = gelu_net(test_data)
-        print(f"\nTest Loss (GeLU): {criterion(output, test_labels)}\n")
+        for i, data in enumerate(train_data):
+            optimizer.zero_grad()
+            output = gelu_net(data)
+            loss = criterion(output, train_labels[i])
+            loss.backward()
+            optimizer.step()
 
     ##
     ## Let's test the ReLU network
     ##
     criterion = nn.MSELoss()
-    optimizer = torch.optim.Adam(relu_net.parameters(), lr=0.001)
+    optimizer = torch.optim.Adam(relu_net.parameters(), lr=lr)
 
     for epoch in range(epochs):
-        optimizer.zero_grad()
-        output = relu_net(train_data)
-        loss = criterion(output, train_labels)
-        loss.backward()
-        optimizer.step()
+        for i, data in enumerate(train_data):
+            optimizer.zero_grad()
+            output = relu_net(data)
+            loss = criterion(output, train_labels[i])
+            loss.backward()
+            optimizer.step()
 
-        if epoch % 100 == 0:
-            print(f"Epoch {epoch} - Loss: {loss.item()}")
+    ##
+    ## Let's test the networks
+    ##
+    gelu_loss = 0
+    relu_loss = 0
 
-    with torch.no_grad():
-        output = relu_net(test_data)
-        print(f"\nTest Loss (ReLU): {criterion(output, test_labels)}\n")
+    gelu_preds = []
+    relu_preds = []
 
-    print("GeLU Network:")
-    print(gelu_net(test_data))
-    print("ReLU Network:")
-    print(relu_net(test_data))
+    for i, data in enumerate(test_data):
+        gelu_pred = gelu_net(data)
+        relu_pred = relu_net(data)
+
+        gelu_loss += criterion(gelu_pred, test_labels[i])
+        relu_loss += criterion(relu_pred, test_labels[i])
+
+        gelu_preds.append(gelu_pred)
+        relu_preds.append(relu_pred)
+
+    print(f"Test Loss (GeLU): {gelu_loss}")
+    print(f"Test Loss (ReLU): {relu_loss}")
+
+    for i in range(len(test_data)):
+        print(
+            f"Actual: {test_labels[i].item()} | GeLU: {gelu_preds[i].item()} | ReLU: {relu_preds[i].item()}"
+        )
+
 
 ##
 ## Example output:
