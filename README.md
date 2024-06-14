@@ -9,8 +9,8 @@ GeLU seems to be relatively more accurate than ReLU, but it's not always the cas
 An example output from running `main.py`
 
 ```
-Test Loss (GeLU): 0.21306896209716797
-Test Loss (ReLU): 0.6141756772994995
-Actual: 30.0 | GeLU: 30.40980339050293 | ReLU: 30.139482498168945
-Actual: 22.0 | GeLU: 21.787561416625977 | ReLU: 21.228818893432617
+Test Loss (GeLU): 0.2649143636226654
+Test Loss (ReLU): 0.591556191444397
+Actual: 30.0 | GeLU: 30.477054595947266 | ReLU: 30.39864730834961
+Actual: 22.0 | GeLU: 21.806781768798828 | ReLU: 21.342248916625977
 ```

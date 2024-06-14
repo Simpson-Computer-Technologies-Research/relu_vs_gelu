@@ -59,7 +59,7 @@ if __name__ == "__main__":
         torch.Tensor([1.75, 75, 0]),
         torch.Tensor([1.65, 55, 0]),
     ]
-    
+
     train_labels = [
         torch.Tensor([25]),
         torch.Tensor([20]),
@@ -117,8 +117,9 @@ if __name__ == "__main__":
     relu_preds = []
 
     for i, data in enumerate(test_data):
-        gelu_pred = gelu_net(data)
-        relu_pred = relu_net(data)
+        with torch.no_grad():
+            gelu_pred = gelu_net(data)
+            relu_pred = relu_net(data)
 
         gelu_loss += criterion(gelu_pred, test_labels[i])
         relu_loss += criterion(relu_pred, test_labels[i])
@@ -138,8 +139,10 @@ if __name__ == "__main__":
 ##
 ## Example output:
 ##
-## Test Loss (GeLU): 0.08334237337112427
-## Test Loss (ReLU): 0.45898932218551636
+## Test Loss (GeLU): 0.2649143636226654
+## Test Loss (ReLU): 0.591556191444397
+## Actual: 30.0 | GeLU: 30.477054595947266 | ReLU: 30.39864730834961
+## Actual: 22.0 | GeLU: 21.806781768798828 | ReLU: 21.342248916625977
 ##
 
 
