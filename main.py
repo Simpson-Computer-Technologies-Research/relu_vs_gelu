@@ -59,6 +59,7 @@ if __name__ == "__main__":
         torch.Tensor([1.75, 75, 0]),
         torch.Tensor([1.65, 55, 0]),
     ]
+    
     train_labels = [
         torch.Tensor([25]),
         torch.Tensor([20]),
