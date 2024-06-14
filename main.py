@@ -121,11 +121,17 @@ if __name__ == "__main__":
             gelu_pred = gelu_net(data)
             relu_pred = relu_net(data)
 
-        gelu_loss += criterion(gelu_pred, test_labels[i])
-        relu_loss += criterion(relu_pred, test_labels[i])
+        _gelu_loss = criterion(gelu_pred, test_labels[i])
+        _relu_loss = criterion(relu_pred, test_labels[i])
+
+        gelu_loss += _gelu_loss
+        relu_loss += _relu_loss
 
         gelu_preds.append(gelu_pred)
         relu_preds.append(relu_pred)
+
+    relu_loss /= len(test_data)
+    gelu_loss /= len(test_data)
 
     print(f"Test Loss (GeLU): {gelu_loss}")
     print(f"Test Loss (ReLU): {relu_loss}")
@@ -139,10 +145,10 @@ if __name__ == "__main__":
 ##
 ## Example output:
 ##
-## Test Loss (GeLU): 0.2649143636226654
-## Test Loss (ReLU): 0.591556191444397
-## Actual: 30.0 | GeLU: 30.477054595947266 | ReLU: 30.39864730834961
-## Actual: 22.0 | GeLU: 21.806781768798828 | ReLU: 21.342248916625977
+## Test Loss (GeLU): 0.13099078834056854
+## Test Loss (ReLU): 0.31609782576560974
+## Actual: 30.0 | GeLU: 30.32281494140625 | ReLU: 30.15665626525879
+## Actual: 22.0 | GeLU: 21.602794647216797 | ReLU: 21.220478057861328
 ##
 
 
